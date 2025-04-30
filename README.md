@@ -115,7 +115,7 @@ from . import agent
 
 #### Step 3: Observe the result
 
-Run `adk web` from the adk_agent_samples directory (ensure your virtual environment is active):
+Run `adk web` from the agent directory (ensure your virtual environment is active):
 
 ```shell
 adk web
