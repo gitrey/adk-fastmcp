@@ -44,6 +44,9 @@ Execute Cloud Run Deployment command from your FastMCP server directory(eg. `./f
         --region YOUR_REGION \
         --allow-unauthenticated
 ```
+
+# Agent config
+
 #### Step 1: Attach the FastMCP Server to your ADK agent via `MCPToolset`
 
 Create `agent.py` and use the following code snippet to define a function that initializes the `MCPToolset`.
