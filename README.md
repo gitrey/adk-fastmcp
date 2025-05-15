@@ -58,6 +58,11 @@ Create `agent.py` and use the following code snippet to define a function that i
 import os
 
 import google.auth
+import google.oauth2.id_token
+import google.auth.transport.requests
+
+from contextlib import AsyncExitStack
+
 from google.adk.agents import Agent
 from google.adk.tools.tool_context import ToolContext
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseServerParams
@@ -69,7 +74,7 @@ os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
 
 
 async def get_sum(a: int, b: int) -> int:
-    """Calculate the sum of two numbers.
+    """Get sum for two numbers
 
     Args:
         a: number
@@ -80,11 +85,20 @@ async def get_sum(a: int, b: int) -> int:
     """
     common_exit_stack = AsyncExitStack()
 
+    mcp_tool_url = "https://fastmcp-demo-00000000000.us-central1.run.app"
+    request = google.auth.transport.requests.Request()
+    target_audience = mcp_tool_url
+
+    # For an agent running on GCP runtimes, consider using:
+    # https://cloud.google.com/docs/authentication/get-id-token#metadata-server
+    # This can be used at global scope of agent, and then use the .refresh() method
+    # on the credential which will only call metadata service once per hour
+    id_token = google.oauth2.id_token.fetch_id_token(request, target_audience)
+
     tools, _ = await MCPToolset.from_server(
         connection_params=SseServerParams(
             url="https://fastmcp-demo-00000000000.us-central1.run.app/sse",
-            project_id="YOUR-GCP-PROJECT-ID",
-            location="us-central1",
+            headers={"Authorization": f"Bearer {id_token}"},
         ),
         async_exit_stack=common_exit_stack
     )
