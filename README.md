@@ -41,8 +41,7 @@ Execute Cloud Run Deployment command from your FastMCP server directory(eg. `./f
 ```shell
     gcloud run deploy fastmcp-demo \
         --source . \
-        --region YOUR_REGION \
-        --allow-unauthenticated
+        --region YOUR_REGION
 ```
 
 # Agent config
@@ -116,9 +115,20 @@ Create an `__init__.py` in the same folder as the `agent.py` above
 from . import agent
 ```
 
-#### Step 3: Observe the result
+#### Step 3: Setup credentials to run agent locally
 
-Run `adk web` from the agent directory (ensure your virtual environment is active):
+To run the agent locally, you need to set up your Google Cloud credentials. You can do this by setting the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to point to your service account key file.
+
+You can do this by running the following command in your terminal:
+
+```shell
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
+```
+Make sure to replace `/path/to/service-account-key.json` with the actual path to your service account key file.
+
+#### Step 4: Run the agent
+
+Run `adk web` from the repo root directory (ensure your virtual environment is active):
 
 ```shell
 adk web
